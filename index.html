@@ -1,1 +1,61 @@
-<h1>Teste 1 2 3</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de CPF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #cpf {
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerador de CPF</h1>
+    <div id="cpf">000.000.000-00</div>
+    <button onclick="gerarCPF()">Gerar CPF</button>
+
+    <script>
+        function gerarCPF() {
+            const cpf = Array(11).fill(0).map(() => Math.floor(Math.random() * 10));
+            cpf[9] = calcularDigitoVerificador(cpf.slice(0, 9));
+            cpf[10] = calcularDigitoVerificador(cpf.slice(0, 10));
+            
+            const cpfFormatado = formatarCPF(cpf);
+            document.getElementById('cpf').textContent = cpfFormatado;
+        }
+
+        function calcularDigitoVerificador(digitos) {
+            const soma = digitos.reduce((acc, val, index) => {
+                return acc + val * (digitos.length + 1 - index);
+            }, 0);
+            const resto = soma % 11;
+            return resto < 2 ? 0 : 11 - resto;
+        }
+
+        function formatarCPF(cpf) {
+            return cpf.slice(0, 9).join('') + '-' + cpf.slice(9).join('');
+        }
+
+        // Gera um CPF inicial ao carregar a página
+        gerarCPF();
+    </script>
+</body>
+</html>
